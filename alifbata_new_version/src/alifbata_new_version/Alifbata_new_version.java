@@ -6,6 +6,8 @@
 
 package alifbata_new_version;
 
+import com.views.Main_Frame;
+
 /**
  *
  * @author it6
@@ -16,7 +18,8 @@ public class Alifbata_new_version {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        Main_Frame main=new Main_Frame();
+        main.setVisible(true);
     }
     
 }
