@@ -5,9 +5,9 @@
  Email : gtiwari333@gmail.com,
  Blog : http://ganeshtiwaridotcomdotnp.blogspot.com/ 
  */
-package com.audio;
+package com.audio.wavProcessing;
 
-import com.controller.FFT;
+import com.audio.processing.FFT;
 import javax.sound.sampled.*;
 import java.io.*;
 

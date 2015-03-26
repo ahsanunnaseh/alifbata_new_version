@@ -1,10 +1,9 @@
 package com.views;
 
-import com.audio.FormatControlConf;
-import com.audio.WaveData;
-import com.controller.JavaSoundRecorder;
+import com.audio.wavProcessing.FormatControlConf;
+import com.audio.wavProcessing.WaveData;
+
 import com.util.Error_Message;
-import com.util.Global_Function;
 import com.util.Image_Processing;
 import com.util.MessageType;
 import java.awt.Color;
@@ -41,8 +40,8 @@ import javax.swing.JPanel;
 public class Test_Form extends JFrame implements ActionListener {
 
     private final Error_Message error_message;
-    private final Global_Function global_function;
-    private JavaSoundRecorder recorder;
+
+
 
     byte[] audioBytes = null;
     float[] audioData = null;
@@ -70,7 +69,7 @@ public class Test_Form extends JFrame implements ActionListener {
         this.isSaveRequired = isSaveRequired;
         initComponents();
         error_message = new Error_Message();
-        global_function = new Global_Function();
+
         setImage();
         if (isDrawingRequired) {
 

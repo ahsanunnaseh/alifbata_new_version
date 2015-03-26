@@ -6,7 +6,7 @@
 
 package com.views;
 
-import com.controller.AudioCapture;
+import com.audio.processing.AudioCapture;
 import java.util.Arrays;
 
 /**

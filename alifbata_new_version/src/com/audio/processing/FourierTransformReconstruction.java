@@ -2,13 +2,10 @@
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
- *//*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
  */
-package com.controller;
+package com.audio.processing;
 
+import com.util.AutocorrellatedVoiceActivityDetector;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,48 +18,37 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import javax.sound.sampled.FloatControl;
 
 /**
  *
  * @author Fauziah Ifa Hasan
  */
-public class MainProcessing {
+public class FourierTransformReconstruction {
+    
+    private static final int  SAMPLE_RATE=44100;
 
     public static void main(String[] argv) throws Exception {
-        
-        
-        readAudioBuffertoSave();
-//        double hasil1 = calculate_diff("audio/001_alif.wav", "audio/001_alif.txt");
-//        double hasil2 = calculate_diff("audio/001_123.wav", "audio/001_alif.txt");
-//        double hasil3 = calculate_diff("audio/001_ccc.wav", "audio/001_alif.txt");
-//        double hasil4 = calculate_diff("audio/001_dsds.wav", "audio/001_alif.txt");
-//        double hasil5 = calculate_diff("audio/003_dfd.wav", "audio/001_alif.txt");
-//
-//        double[] data = {hasil1, hasil2, hasil3, hasil4, hasil5};
-//        float[] floatArray = new float[data.length];
-//        for (int i = 0; i < data.length; i++) {
-//            floatArray[i] = (float) data[i];
-//        }
-//        Divide_And_Conquer m = new Divide_And_Conquer(floatArray, data.length);
-//        System.out.println("Contents of the Array");
-//        m.print();
-//        m.dacMaxMini();
-//        System.out.println("In this array maximum element : " + m.getMax());
-//        System.out.println("In this array minimum element : " + m.getMin());
+        double hasil1 = calculate_diff("audio_file/level1_.wav", "audio/001_alif.txt");
+        double hasil2 = calculate_diff("audio_file/level1_.wav", "audio/001_alif.txt");
+        double hasil3 = calculate_diff("audio_file/level1_.wav", "audio/001_alif.txt");
+        double hasil4 = calculate_diff("audio_file/level1_.wav", "audio/001_alif.txt");
+        double hasil5 = calculate_diff("audio_file/level1_.wav", "audio/001_alif.txt");
+
+        double[] data = {hasil1, hasil2, hasil3, hasil4, hasil5};
+        float[] floatArray = new float[data.length];
+        for (int i = 0; i < data.length; i++) {
+            floatArray[i] = (float) data[i];
+        }
+        Divide_And_Conquer m = new Divide_And_Conquer(floatArray, data.length);
+        System.out.println("Contents of the Array");
+        m.print();
+        m.dacMaxMini();
+        System.out.println("In this array maximum element : " + m.getMax());
+        System.out.println("In this array minimum element : " + m.getMin());
 
     }
-    public static boolean recordToSave(){
-        return false;
-        
-    }    
-    public static boolean recordTocompare(){
-        AudioCapture capture=new AudioCapture();
-        AudioCapture.start();
-        capture.stop();  
-        return false;
-        
-    }
-    
+
     public static double calculate_diff(String pathfileaudioinput, String paath_buffer_filename) throws Exception {
         float[] data_input_buffer = readAudioBuffertoCompare(pathfileaudioinput);
         float[] data_file_buffer = readFromFile(paath_buffer_filename);
@@ -71,15 +57,20 @@ public class MainProcessing {
     }
 
     public static float[] readAudioBuffertoCompare(String audioPath) throws Exception {
+   
         Divide_And_Conquer divide_and_conquer;
         WaveDecoder decoder = new WaveDecoder(new FileInputStream(audioPath));
         float[] samples = new float[1024];
-        FFT fft = new FFT(1024, 44100);
+        FFT fft = new FFT(1024, SAMPLE_RATE);
         int i = 0;
         float[] datasample_fft;
         int limit = decoder.readSamples(samples);
         float[] datasample = new float[limit];
         while (decoder.readSamples(samples) > 0) {
+            AutocorrellatedVoiceActivityDetector avd=new AutocorrellatedVoiceActivityDetector();
+            samples=avd.removeSilence(datasample, SAMPLE_RATE);
+   
+         //   avd.removeSilence(voiceSample, limit);
             fft.forward(samples);
             datasample_fft = fft.inverse(samples);
             divide_and_conquer = new Divide_And_Conquer(datasample_fft, datasample_fft.length);
@@ -103,18 +94,16 @@ public class MainProcessing {
     }
 
     public static void readAudioBuffertoSave() throws Exception {
-        
+
         Divide_And_Conquer divide_and_conquer;
         WaveDecoder decoder = new WaveDecoder(new FileInputStream("audio/001_alif.wav"));
         float[] samples = new float[1024];
-                    
         FFT fft = new FFT(1024, 44100);
         int i = 0;
         float[] datasample_fft;
         int limit = decoder.readSamples(samples);
         float[][] datasample = new float[limit][2];
         while (decoder.readSamples(samples) > 0) {
-           
             fft.forward(samples);
             datasample_fft = fft.inverse(samples);
             divide_and_conquer = new Divide_And_Conquer(datasample_fft, datasample_fft.length);

@@ -1,4 +1,4 @@
-package com.controller;
+package com.audio.processing;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

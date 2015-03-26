@@ -8,7 +8,7 @@
  * and open the template in the editor.
  */
 
-package com.controller;
+package com.audio.processing;
 
 /**
  *

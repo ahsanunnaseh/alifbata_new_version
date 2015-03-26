@@ -5,7 +5,7 @@
   Email : gtiwari333@gmail.com,
   Blog : http://ganeshtiwaridotcomdotnp.blogspot.com/ 
  */
-package com.audio;
+package com.audio.wavProcessing;
 
 import javax.sound.sampled.AudioFormat;
 

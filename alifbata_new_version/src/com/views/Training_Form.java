@@ -2,12 +2,10 @@
 
 package com.views;
 
-import com.audio.FormatControlConf;
-import com.audio.WaveData;
-import com.audio.preProcessing.FFT;
-import com.controller.JavaSoundRecorder;
+import com.audio.wavProcessing.FormatControlConf;
+import com.audio.wavProcessing.WaveData;
+
 import com.util.Error_Message;
-import com.util.Global_Function;
 import com.util.MessageType;
 import com.util.File_Processing;
 import java.awt.BasicStroke;
@@ -59,8 +57,6 @@ import javax.swing.JPanel;
 public class Training_Form extends JFrame implements ActionListener {
 
     private final Error_Message error_message;
-    private final Global_Function global_function;
-    private JavaSoundRecorder recorder;
 
     byte[] audioBytes = null;
     float[] audioData = null;
@@ -87,7 +83,7 @@ public class Training_Form extends JFrame implements ActionListener {
         this.isSaveRequired = isSaveRequired;
         initComponents();
         error_message = new Error_Message();
-        global_function = new Global_Function();
+   
 
         if (isDrawingRequired) {
             JPanel samplingPanel = new JPanel(new BorderLayout());
@@ -278,8 +274,7 @@ public class Training_Form extends JFrame implements ActionListener {
             Logger.getLogger(Training_Form.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        FFT fft=new FFT();
-        fft.computeFFT(data);
+
 
     }
     
