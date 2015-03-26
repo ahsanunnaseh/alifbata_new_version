@@ -32,7 +32,6 @@ public class Main_Frame extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        lbl_home = new javax.swing.JPanel();
 
         jMenu1.setText("jMenu1");
 
@@ -50,11 +49,6 @@ public class Main_Frame extends javax.swing.JFrame {
         jButton2.setText("Training");
         getContentPane().add(jButton2);
         jButton2.setBounds(20, 60, 90, 60);
-
-        lbl_home.setBackground(new java.awt.Color(255, 255, 255));
-        lbl_home.setLayout(null);
-        getContentPane().add(lbl_home);
-        lbl_home.setBounds(120, 30, 510, 420);
 
         setBounds(0, 0, 671, 515);
     }// </editor-fold>//GEN-END:initComponents
@@ -99,6 +93,5 @@ public class Main_Frame extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JPanel lbl_home;
     // End of variables declaration//GEN-END:variables
 }
