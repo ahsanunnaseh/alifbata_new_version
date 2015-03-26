@@ -8,7 +8,7 @@
  * and open the template in the editor.
  */
 
-package helper;
+package com.helper;
 
 import javax.swing.JOptionPane;
 
