@@ -9,6 +9,7 @@ import com.controller.JavaSoundRecorder;
 import com.util.Error_Message;
 import com.util.Global_Function;
 import com.util.MessageType;
+import com.util.File_Processing;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -33,6 +34,8 @@ import java.io.IOException;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
@@ -260,13 +263,28 @@ public class Training_Form extends JFrame implements ActionListener {
         while (saveFileName == null || !saveFileName.equalsIgnoreCase(prefixfile + txname.getText())) {
             saveFileName = JOptionPane.showInputDialog(this, "Apakah Training " + cblevel.getSelectedItem().toString() + " Huruf Hijaiyah berikut :", prefixfile + txname.getText());
         }
-
+        
         wd.saveToFile(saveFileName, AudioFileFormat.Type.WAVE, audioInputStream);
         wd.extractFloatDataFromAudioInputStream_saveToTXTFile(saveFileName, audioInputStream);
         float data [] =wd.extractFloatDataFromAudioInputStream(audioInputStream);
+        File source = new File(txpath.getText());
+      
+        
+        String ext=File_Processing.getFileExtension(new File(txpath.getText()));
+        File destination= new File("audio_image/"+prefixfile + txname.getText()+"."+ext);
+        try {
+            File_Processing.doCopy(new File(txpath.getText()), destination);
+        } catch (IOException ex) {
+            Logger.getLogger(Training_Form.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         FFT fft=new FFT();
         fft.computeFFT(data);
 
+    }
+    
+    public void saveProcessing(){
+        
     }
 
     private Image getScaledImage(Image srcImg, int w, int h) {
@@ -303,10 +321,12 @@ public class Training_Form extends JFrame implements ActionListener {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("Gambar");
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(20, 120, 70, 17);
+        jLabel1.setBounds(20, 120, 70, 14);
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Huruf Hijaiyah");
         getContentPane().add(jLabel2);
         jLabel2.setBounds(20, 30, 110, 20);
@@ -315,6 +335,7 @@ public class Training_Form extends JFrame implements ActionListener {
         getContentPane().add(cblevel);
         cblevel.setBounds(130, 70, 280, 30);
 
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("Level");
         getContentPane().add(jLabel3);
         jLabel3.setBounds(20, 70, 80, 20);
@@ -338,7 +359,7 @@ public class Training_Form extends JFrame implements ActionListener {
 
         playB.setText("Play");
         getContentPane().add(playB);
-        playB.setBounds(200, 160, 80, 27);
+        playB.setBounds(200, 160, 80, 23);
         playB.setPreferredSize(new Dimension(85, 24));
         playB.addActionListener(this);
         playB.setEnabled(false);
@@ -351,7 +372,7 @@ public class Training_Form extends JFrame implements ActionListener {
             }
         });
         getContentPane().add(saveB);
-        saveB.setBounds(290, 160, 80, 27);
+        saveB.setBounds(290, 160, 80, 23);
         saveB.setPreferredSize(new Dimension(85, 24));
         saveB.addActionListener(this);
         saveB.setEnabled(false);
@@ -364,7 +385,7 @@ public class Training_Form extends JFrame implements ActionListener {
             }
         });
         getContentPane().add(captB);
-        captB.setBounds(20, 160, 80, 27);
+        captB.setBounds(20, 160, 80, 23);
         captB.setPreferredSize(new Dimension(85, 24));
         captB.addActionListener(this);
         captB.setEnabled(true);
@@ -372,7 +393,7 @@ public class Training_Form extends JFrame implements ActionListener {
 
         pausB.setText("Pause");
         getContentPane().add(pausB);
-        pausB.setBounds(110, 160, 80, 27);
+        pausB.setBounds(110, 160, 80, 23);
         pausB.setPreferredSize(new Dimension(85, 24));
         pausB.addActionListener(this);
         pausB.setEnabled(false);

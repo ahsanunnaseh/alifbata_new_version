@@ -1,4 +1,3 @@
-
 package com.views;
 
 import com.audio.FormatControlConf;
@@ -6,25 +5,32 @@ import com.audio.WaveData;
 import com.controller.JavaSoundRecorder;
 import com.util.Error_Message;
 import com.util.Global_Function;
+import com.util.Image_Processing;
 import com.util.MessageType;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Line2D;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -38,14 +44,13 @@ public class Test_Form extends JFrame implements ActionListener {
     private final Global_Function global_function;
     private JavaSoundRecorder recorder;
 
-
     byte[] audioBytes = null;
     float[] audioData = null;
     final int BUFFER_SIZE = 16384;
     int counter = 0;
     FormatControlConf formatControls = new FormatControlConf(); // @jve:decl-index=0:
     Capture capture = new Capture(); // @jve:decl-index=0:
-   
+
     Vector<Line2D.Double> lines = new Vector<Line2D.Double>(); // @jve:decl-index=0:
     AudioInputStream audioInputStream; // @jve:decl-index=0:
     File file; // @jve:decl-index=0:
@@ -57,18 +62,18 @@ public class Test_Form extends JFrame implements ActionListener {
     String saveFileName = null;
     String errStr;
     double duration, seconds;
-     JVisualizer samplingPanel = new JVisualizer();
+    JVisualizer samplingPanel = new JVisualizer();
 
-    public Test_Form(boolean isDrawingRequired, boolean isSaveRequired) {
+    public Test_Form(boolean isDrawingRequired, boolean isSaveRequired) throws IOException {
         wd = new WaveData();
         this.isDrawingRequired = isDrawingRequired;
         this.isSaveRequired = isSaveRequired;
         initComponents();
         error_message = new Error_Message();
         global_function = new Global_Function();
-
+        setImage();
         if (isDrawingRequired) {
-           
+
 //                        EmptyBorder eb = new EmptyBorder(1, 1, 1, 1);
 //			SoftBevelBorder sbb = new SoftBevelBorder(SoftBevelBorder.LOWERED);
 //			samplingPanel.setBorder(new CompoundBorder(eb, sbb));
@@ -78,6 +83,23 @@ public class Test_Form extends JFrame implements ActionListener {
             add(samplingPanel);
         }
 
+    }
+
+    public void setImage() throws IOException {
+        Image_Processing image_processing = new Image_Processing();
+
+        Image image = image_processing.getScaledImage(ImageIO.read(new File("audio_image/level1_sdd.jpg")), lbgambar.getWidth(), lbgambar.getHeight());
+
+        BufferedImage img = (BufferedImage) image;
+        ImageIcon icon = new ImageIcon(img); // ADDED
+        lbgambar.setIcon(icon); // ADDED
+
+
+        Dimension imageSize = new Dimension(lbgambar.getWidth(), lbgambar.getHeight()); // ADDED
+        lbgambar.setPreferredSize(imageSize); // ADDED
+
+        lbgambar.revalidate(); // ADDED
+        lbgambar.repaint(); // ADDED
     }
 
     public String getSaveFileName() {
@@ -95,12 +117,11 @@ public class Test_Form extends JFrame implements ActionListener {
                 this.file = file;
                 errStr = null;
                 audioInputStream = AudioSystem.getAudioInputStream(file);
-              
+
                 // fileName = file.getName();
                 long milliseconds = (long) ((audioInputStream.getFrameLength() * 1000) / audioInputStream.getFormat().getFrameRate());
                 duration = milliseconds / 1000.0;
 
-                
                 if (updateComponents) {
                     formatControls.setFormat(audioInputStream.getFormat());
                     if (isDrawingRequired) {
@@ -129,12 +150,12 @@ public class Test_Form extends JFrame implements ActionListener {
         System.out.println("actionPerformed *********");
         Object obj = e.getSource();
 
-            if (captB.getText().startsWith("Record")) {
-                startRecord();
-            } else {
-                stopRecording();
-            }
-            }
+        if (captB.getText().startsWith("Record")) {
+            startRecord();
+        } else {
+            stopRecording();
+        }
+    }
 
     public void startRecord() {
         file = null;
@@ -154,8 +175,6 @@ public class Test_Form extends JFrame implements ActionListener {
         captB.setText("Record");
     }
 
-
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -165,15 +184,11 @@ public class Test_Form extends JFrame implements ActionListener {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        imagePanel = new javax.swing.JPanel();
         captB = new javax.swing.JButton();
+        lbgambar = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
-
-        imagePanel.setBackground(new java.awt.Color(48, 200, 65));
-        getContentPane().add(imagePanel);
-        imagePanel.setBounds(200, 10, 200, 210);
 
         captB.setText("Record");
         captB.addActionListener(new java.awt.event.ActionListener() {
@@ -182,20 +197,24 @@ public class Test_Form extends JFrame implements ActionListener {
             }
         });
         getContentPane().add(captB);
-        captB.setBounds(200, 230, 200, 23);
+        captB.setBounds(200, 240, 200, 30);
         captB.setPreferredSize(new Dimension(85, 24));
         captB.addActionListener(this);
         captB.setEnabled(true);
         captB.setFocusable(false);
 
-        setBounds(0, 0, 662, 424);
+        lbgambar.setBackground(new java.awt.Color(0, 255, 68));
+        lbgambar.setForeground(new java.awt.Color(46, 54, 46));
+        lbgambar.setOpaque(true);
+        getContentPane().add(lbgambar);
+        lbgambar.setBounds(200, 10, 200, 220);
+
+        setBounds(0, 0, 662, 438);
     }// </editor-fold>//GEN-END:initComponents
 
     private void captBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_captBActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_captBActionPerformed
-
-   
 
     /**
      * Reads data from the input channel and writes to the output stream
@@ -393,7 +412,7 @@ public class Test_Form extends JFrame implements ActionListener {
         public void run() {
             seconds = 0;
             while (thread != null) {
-                 if ((capture.line != null) && (capture.line.isActive())) {
+                if ((capture.line != null) && (capture.line.isActive())) {
 
                     long milliseconds = (long) (capture.line.getMicrosecondPosition() / 1000);
                     seconds = milliseconds / 1000.0;
@@ -425,13 +444,17 @@ public class Test_Form extends JFrame implements ActionListener {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new Test_Form(true, true).setVisible(true);
+                try {
+                    new Test_Form(true, true).setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(Test_Form.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton captB;
-    private javax.swing.JPanel imagePanel;
+    private javax.swing.JLabel lbgambar;
     // End of variables declaration//GEN-END:variables
 }
