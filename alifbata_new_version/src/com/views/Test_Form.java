@@ -69,13 +69,10 @@ public class Test_Form extends JFrame implements ActionListener {
         this.isSaveRequired = isSaveRequired;
         initComponents();
         error_message = new Error_Message();
-
-        setImage();
+        File aa=new File("audio_image/level1_sdd.jpg");
+        setImage(aa);
         if (isDrawingRequired) {
 
-//                        EmptyBorder eb = new EmptyBorder(1, 1, 1, 1);
-//			SoftBevelBorder sbb = new SoftBevelBorder(SoftBevelBorder.LOWERED);
-//			samplingPanel.setBorder(new CompoundBorder(eb, sbb));
             samplingPanel.add(samplingGraph = new SamplingGraph());
             samplingPanel.setBackground(new java.awt.Color(29, 13, 13));
             samplingPanel.setBounds(20, 260, 610, 110);
@@ -84,10 +81,10 @@ public class Test_Form extends JFrame implements ActionListener {
 
     }
 
-    public void setImage() throws IOException {
+    public void setImage(File file) throws IOException {
         Image_Processing image_processing = new Image_Processing();
 
-        Image image = image_processing.getScaledImage(ImageIO.read(new File("audio_image/level1_sdd.jpg")), lbgambar.getWidth(), lbgambar.getHeight());
+        Image image = image_processing.getScaledImage(ImageIO.read(file), lbgambar.getWidth(), lbgambar.getHeight());
 
         BufferedImage img = (BufferedImage) image;
         ImageIcon icon = new ImageIcon(img); // ADDED

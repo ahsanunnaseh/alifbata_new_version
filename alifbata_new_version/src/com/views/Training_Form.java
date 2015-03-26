@@ -4,10 +4,10 @@ package com.views;
 
 import com.audio.wavProcessing.FormatControlConf;
 import com.audio.wavProcessing.WaveData;
-
+import com.util.Constants;
 import com.util.Error_Message;
-import com.util.MessageType;
 import com.util.File_Processing;
+import com.util.MessageType;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -267,7 +267,9 @@ public class Training_Form extends JFrame implements ActionListener {
       
         
         String ext=File_Processing.getFileExtension(new File(txpath.getText()));
-        File destination= new File("audio_image/"+prefixfile + txname.getText()+"."+ext);
+
+        File destination= new File(Constants.IMAGE_PATH +prefixfile + txname.getText()+"."+ext);
+   
         try {
             File_Processing.doCopy(new File(txpath.getText()), destination);
         } catch (IOException ex) {
