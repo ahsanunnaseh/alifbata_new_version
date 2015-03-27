@@ -182,6 +182,15 @@ public class Test_Form extends JFrame implements ActionListener {
 
         captB = new javax.swing.JButton();
         lbgambar = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
@@ -193,7 +202,7 @@ public class Test_Form extends JFrame implements ActionListener {
             }
         });
         getContentPane().add(captB);
-        captB.setBounds(200, 240, 200, 30);
+        captB.setBounds(220, 230, 170, 30);
         captB.setPreferredSize(new Dimension(85, 24));
         captB.addActionListener(this);
         captB.setEnabled(true);
@@ -203,9 +212,49 @@ public class Test_Form extends JFrame implements ActionListener {
         lbgambar.setForeground(new java.awt.Color(46, 54, 46));
         lbgambar.setOpaque(true);
         getContentPane().add(lbgambar);
-        lbgambar.setBounds(200, 10, 200, 220);
+        lbgambar.setBounds(220, 50, 170, 170);
 
-        setBounds(0, 0, 662, 438);
+        jPanel1.setBackground(java.awt.Color.green);
+        jPanel1.setLayout(null);
+
+        jButton1.setText("Prev");
+        jPanel1.add(jButton1);
+        jButton1.setBounds(10, 20, 70, 70);
+
+        jButton2.setText("Next");
+        jPanel1.add(jButton2);
+        jButton2.setBounds(530, 20, 70, 70);
+
+        getContentPane().add(jPanel1);
+        jPanel1.setBounds(20, 270, 610, 100);
+
+        jPanel2.setBackground(java.awt.Color.green);
+        jPanel2.setLayout(null);
+
+        jLabel1.setText("100");
+        jPanel2.add(jLabel1);
+        jLabel1.setBounds(90, 10, 27, 17);
+
+        jLabel2.setText("Skor");
+        jPanel2.add(jLabel2);
+        jLabel2.setBounds(10, 10, 50, 17);
+
+        getContentPane().add(jPanel2);
+        jPanel2.setBounds(150, 10, 130, 30);
+
+        jPanel3.setBackground(java.awt.Color.green);
+        getContentPane().add(jPanel3);
+        jPanel3.setBounds(0, 0, 80, 60);
+
+        jPanel4.setBackground(java.awt.Color.green);
+        getContentPane().add(jPanel4);
+        jPanel4.setBounds(360, 10, 90, 30);
+
+        jPanel5.setBackground(java.awt.Color.green);
+        getContentPane().add(jPanel5);
+        jPanel5.setBounds(570, 0, 80, 60);
+
+        setBounds(0, 0, 656, 438);
     }// </editor-fold>//GEN-END:initComponents
 
     private void captBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_captBActionPerformed
@@ -451,6 +500,15 @@ public class Test_Form extends JFrame implements ActionListener {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton captB;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JLabel lbgambar;
     // End of variables declaration//GEN-END:variables
 }
