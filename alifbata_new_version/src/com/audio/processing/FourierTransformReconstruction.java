@@ -5,7 +5,8 @@
  */
 package com.audio.processing;
 
-import com.util.AutocorrellatedVoiceActivityDetector;
+
+import com.komponent.AutocorrellatedVoiceActivityDetector;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;

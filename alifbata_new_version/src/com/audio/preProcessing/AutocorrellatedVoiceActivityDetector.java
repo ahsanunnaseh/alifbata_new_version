@@ -67,7 +67,7 @@ public class AutocorrellatedVoiceActivityDetector {
      * @return a new voice sample with silence removed
      */
         
-    public double[] removeSilence(double[] voiceSample, float sampleRate) {
+    public float[] removeSilence(float[] voiceSample, float sampleRate) {
         int oneMilliInSamples = (int)sampleRate / 1000;
 
         int length = voiceSample.length;
@@ -101,7 +101,7 @@ public class AutocorrellatedVoiceActivityDetector {
             
             int fadeLength = FADE_MILLIS * oneMilliInSamples;
             initFadeFactors(fadeLength);
-            double[] shortenedVoiceSample = new double[voiceSample.length - silenceCounter];
+            float[] shortenedVoiceSample = new float[voiceSample.length - silenceCounter];
             int copyCounter = 0;
             for (int i = 0; i < result.length; i++) {
                 if (result[i]) {
@@ -141,7 +141,7 @@ public class AutocorrellatedVoiceActivityDetector {
      * @param startIndex fade in start point
      * @param endIndex fade out end point
      */
-    private void applyFadeInFadeOut(double[] voiceSample, int fadeLength, int startIndex, int endIndex) {
+    private void applyFadeInFadeOut(float[] voiceSample, int fadeLength, int startIndex, int endIndex) {
         int fadeOutStart = endIndex -  fadeLength;
         for(int j = 0; j < fadeLength; j++) {
             voiceSample[startIndex + j] *= fadeInFactors[j];

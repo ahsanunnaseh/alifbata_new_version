@@ -6,6 +6,8 @@
 
 package com.views;
 
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author Fauziah Ifa Hasan
@@ -18,6 +20,16 @@ public class Main_Frame extends javax.swing.JFrame {
     public Main_Frame() {
         initComponents();
     }
+    protected ImageIcon createImageIcon(String path,
+                                           String description) {
+    java.net.URL imgURL = getClass().getResource(path);
+    if (imgURL != null) {
+        return new ImageIcon(imgURL, description);
+    } else {
+        System.err.println("Couldn't find file: " + path);
+        return null;
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -34,39 +46,35 @@ public class Main_Frame extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
 
         jMenu1.setText("jMenu1");
 
         jMenu2.setText("jMenu2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
         getContentPane().setLayout(null);
 
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton1.setText("Informasi");
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/_icon.jpg"))); // NOI18N
         getContentPane().add(jButton1);
-        jButton1.setBounds(360, 300, 90, 60);
+        jButton1.setBounds(460, 30, 130, 140);
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton2.setText("Belajar");
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/home_icon.jpg"))); // NOI18N
+        jButton2.setDefaultCapable(false);
         getContentPane().add(jButton2);
-        jButton2.setBounds(40, 300, 90, 60);
+        jButton2.setBounds(30, 310, 130, 130);
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton3.setText("Test");
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/settinsg_icon.jpg"))); // NOI18N
         getContentPane().add(jButton3);
-        jButton3.setBounds(150, 300, 90, 60);
+        jButton3.setBounds(100, 160, 130, 130);
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton4.setText("Setting");
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/main_icon.jpg"))); // NOI18N
         getContentPane().add(jButton4);
-        jButton4.setBounds(260, 300, 90, 60);
-
-        jLabel1.setBackground(java.awt.Color.green);
-        jLabel1.setForeground(java.awt.Color.green);
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(470, 80, 160, 360);
+        jButton4.setBounds(270, 70, 130, 130);
 
         setBounds(0, 0, 671, 515);
     }// </editor-fold>//GEN-END:initComponents
@@ -111,7 +119,6 @@ public class Main_Frame extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     // End of variables declaration//GEN-END:variables

@@ -188,21 +188,21 @@ public class Test_Form extends JFrame implements ActionListener {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
 
-        captB.setText("Record");
+        captB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/playtest.jpg"))); // NOI18N
         captB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 captBActionPerformed(evt);
             }
         });
         getContentPane().add(captB);
-        captB.setBounds(220, 230, 170, 30);
+        captB.setBounds(30, 230, 80, 80);
         captB.setPreferredSize(new Dimension(85, 24));
         captB.addActionListener(this);
         captB.setEnabled(true);
@@ -212,49 +212,49 @@ public class Test_Form extends JFrame implements ActionListener {
         lbgambar.setForeground(new java.awt.Color(46, 54, 46));
         lbgambar.setOpaque(true);
         getContentPane().add(lbgambar);
-        lbgambar.setBounds(220, 50, 170, 170);
+        lbgambar.setBounds(180, 100, 190, 200);
 
-        jPanel1.setBackground(java.awt.Color.green);
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(null);
 
-        jButton1.setText("Prev");
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/previousb.jpg"))); // NOI18N
         jPanel1.add(jButton1);
-        jButton1.setBounds(10, 20, 70, 70);
+        jButton1.setBounds(10, 20, 50, 50);
 
-        jButton2.setText("Next");
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/nextb.jpg"))); // NOI18N
         jPanel1.add(jButton2);
-        jButton2.setBounds(530, 20, 70, 70);
+        jButton2.setBounds(550, 20, 50, 50);
 
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(20, 270, 610, 100);
+        jPanel1.setBounds(10, 320, 610, 100);
 
         jPanel2.setBackground(java.awt.Color.green);
         jPanel2.setLayout(null);
 
         jLabel1.setText("100");
         jPanel2.add(jLabel1);
-        jLabel1.setBounds(90, 10, 27, 17);
+        jLabel1.setBounds(90, 10, 18, 14);
 
         jLabel2.setText("Skor");
         jPanel2.add(jLabel2);
-        jLabel2.setBounds(10, 10, 50, 17);
+        jLabel2.setBounds(10, 10, 50, 14);
 
         getContentPane().add(jPanel2);
-        jPanel2.setBounds(150, 10, 130, 30);
-
-        jPanel3.setBackground(java.awt.Color.green);
-        getContentPane().add(jPanel3);
-        jPanel3.setBounds(0, 0, 80, 60);
+        jPanel2.setBounds(130, 10, 130, 30);
 
         jPanel4.setBackground(java.awt.Color.green);
         getContentPane().add(jPanel4);
         jPanel4.setBounds(360, 10, 90, 30);
 
-        jPanel5.setBackground(java.awt.Color.green);
-        getContentPane().add(jPanel5);
-        jPanel5.setBounds(570, 0, 80, 60);
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/homeb.jpg"))); // NOI18N
+        getContentPane().add(jButton3);
+        jButton3.setBounds(590, 0, 50, 50);
 
-        setBounds(0, 0, 656, 438);
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/soundb.jpg"))); // NOI18N
+        getContentPane().add(jButton4);
+        jButton4.setBounds(0, 0, 50, 50);
+
+        setBounds(0, 0, 656, 481);
     }// </editor-fold>//GEN-END:initComponents
 
     private void captBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_captBActionPerformed
@@ -502,13 +502,13 @@ public class Test_Form extends JFrame implements ActionListener {
     private javax.swing.JButton captB;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JLabel lbgambar;
     // End of variables declaration//GEN-END:variables
 }
