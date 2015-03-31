@@ -64,7 +64,7 @@ public class PreProcess {
 		// calculate no of frames, for framing
 
 		noOfFrames = 2 * afterEndPtDetection.length / samplePerFrame - 1;
-             
+      
 		System.out.println("noOfFrames       " + noOfFrames + "  samplePerFrame     " + samplePerFrame + "  EPD length   "
 				+ afterEndPtDetection.length);
 		framedSignal = new float[noOfFrames][samplePerFrame];
