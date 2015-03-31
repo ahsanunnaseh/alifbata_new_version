@@ -1,8 +1,9 @@
 package com.views;
 
+import com.audio.preProcessing.PreProcess;
+import com.audio.processing.FFT;
 import com.audio.wavProcessing.FormatControlConf;
 import com.audio.wavProcessing.WaveData;
-
 import com.util.Error_Message;
 import com.util.Image_Processing;
 import com.util.MessageType;
@@ -91,7 +92,7 @@ public class Test_Form extends JFrame implements ActionListener {
         if (isDrawingRequired) {
 
             samplingPanel.add(samplingGraph = new SamplingGraph());
-            samplingPanel.setBackground(new java.awt.Color(29, 13, 13));
+            samplingPanel.setBackground(java.awt.Color.WHITE);
             samplingPanel.setBounds(20, 340, 600, 90);
             add(samplingPanel);
         }
@@ -243,7 +244,7 @@ public class Test_Form extends JFrame implements ActionListener {
         }
         captB.setToolTipText("Stop");
         captB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/stoptest.jpg"))); // NOI18N
-        
+
     }
 
     public void stopRecording() {
@@ -252,7 +253,7 @@ public class Test_Form extends JFrame implements ActionListener {
         if (isDrawingRequired) {
             samplingGraph.stop();
         }
-        captB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/playtest.jpg"))); 
+        captB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/playtest.jpg")));
         captB.setToolTipText("Play");
     }
 
@@ -293,7 +294,7 @@ public class Test_Form extends JFrame implements ActionListener {
         captB.setEnabled(true);
         captB.setFocusable(false);
 
-        lbgambar.setBackground(new java.awt.Color(0, 255, 68));
+        lbgambar.setBackground(java.awt.Color.white);
         lbgambar.setForeground(new java.awt.Color(46, 54, 46));
         lbgambar.setOpaque(true);
         getContentPane().add(lbgambar);
@@ -302,7 +303,7 @@ public class Test_Form extends JFrame implements ActionListener {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(null);
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(20, 340, 600, 90);
+        jPanel1.setBounds(20, 330, 600, 90);
 
         jPanel2.setBackground(java.awt.Color.green);
         jPanel2.setLayout(null);
@@ -334,7 +335,7 @@ public class Test_Form extends JFrame implements ActionListener {
         getContentPane().add(Buttonbar);
         Buttonbar.setBounds(20, 250, 590, 70);
 
-        setBounds(0, 0, 656, 481);
+        setBounds(0, 0, 656, 465);
     }// </editor-fold>//GEN-END:initComponents
 
     private void captBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_captBActionPerformed
@@ -426,7 +427,6 @@ public class Test_Form extends JFrame implements ActionListener {
                 }
                 samplingPanel.setSamples(data);
 
-                System.out.println(Arrays.toString(data));
                 out.write(data, 0, numBytesRead);
             }
 
@@ -442,10 +442,20 @@ public class Test_Form extends JFrame implements ActionListener {
             } catch (IOException ex) {
                 reportStatus("Error on inputstream", MessageType.ERROR);
             }
-
-            // load bytes into the audio input stream for playback
             audioBytes = out.toByteArray();
-            System.out.println(out.size());
+            float[] audioFloatBytes = convertToFloat(audioBytes);
+            System.out.println("SEBELUM : " + audioFloatBytes.length);
+            PreProcess preprocess=new PreProcess(audioFloatBytes, 1024, 44100);
+            float floatData [][]=preprocess.getFloatDataArray();
+            FFT fft = new FFT(1024, 44100);
+            for(int i=0; i<floatData[0].length; i++){
+                fft.forward(floatData[i]);
+                float [] datasample_fft2 = fft.inverse(floatData[i]);
+                System.out.println(Arrays.toString(datasample_fft2));
+            }
+     
+
+
             ByteArrayInputStream bais = new ByteArrayInputStream(audioBytes);
             audioInputStream = new AudioInputStream(bais, format, audioBytes.length / frameSizeInBytes);
 
@@ -454,7 +464,7 @@ public class Test_Form extends JFrame implements ActionListener {
 
             try {
                 audioInputStream.reset();
-            } catch (Exception ex) {
+            } catch (IOException ex) {
                 reportStatus("Eor in reseting inputStream", MessageType.ERROR);
             }
             if (isDrawingRequired) {
@@ -464,9 +474,20 @@ public class Test_Form extends JFrame implements ActionListener {
         }
     }
 
+    public static float[] convertToFloat(byte[] bytes) {
+
+        float[] asFloat = new float[bytes.length];
+        for (int i = 0; i < bytes.length; i++) {
+            int qw = ((bytes[i] & 0xFF) << 16);
+            asFloat[i] = Float.intBitsToFloat(qw);
+        }
+
+        return asFloat;
+    }
+
     private class ThumbnailAction extends AbstractAction {
 
-        private Icon displayPhoto;
+        private final Icon displayPhoto;
 
         public ThumbnailAction(Icon photo, Icon thumb, String desc) {
             displayPhoto = photo;
@@ -474,9 +495,6 @@ public class Test_Form extends JFrame implements ActionListener {
             putValue(LARGE_ICON_KEY, thumb);
         }
 
-        /**
-         * Shows the full image in the main area and sets the application title.
-         */
         @Override
         public void actionPerformed(ActionEvent e) {
             lbgambar.setIcon(displayPhoto);
@@ -496,14 +514,9 @@ public class Test_Form extends JFrame implements ActionListener {
         AudioFormat format;
 
         public SamplingGraph() {
-            setBackground(new Color(20, 20, 20));
+            setBackground(java.awt.Color.WHITE);
         }
 
-        /**
-         * Creates the wave form.
-         *
-         * @param audioBytes the audio bytes
-         */
         public void createWaveForm(byte[] audioBytes) {
 
             lines.removeAllElements(); // clear the old vector
@@ -549,11 +562,7 @@ public class Test_Form extends JFrame implements ActionListener {
             thread = null;
         }
 
-        /*
-         * (non-Javadoc)
-         * 
-         * @see java.lang.Runnable#run()
-         */
+        @Override
         public void run() {
             seconds = 0;
             while (thread != null) {
@@ -562,10 +571,9 @@ public class Test_Form extends JFrame implements ActionListener {
                     long milliseconds = (long) (capture.line.getMicrosecondPosition() / 1000);
                     seconds = milliseconds / 1000.0;
                 }
-
                 try {
-                    thread.sleep(100);
-                } catch (Exception e) {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
                     break;
                 }
 
@@ -573,8 +581,8 @@ public class Test_Form extends JFrame implements ActionListener {
 
                 while ((capture.line != null && !capture.line.isActive())) {
                     try {
-                        thread.sleep(10);
-                    } catch (Exception e) {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
                         break;
                     }
                 }

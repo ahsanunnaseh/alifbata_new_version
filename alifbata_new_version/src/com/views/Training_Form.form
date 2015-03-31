@@ -137,7 +137,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="saveB">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Save"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/com/resources/sukses.jpg"/>
+        </Property>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveBActionPerformed"/>
@@ -147,7 +149,7 @@
       </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="290" y="160" width="80" height="-1"/>
+          <AbsoluteConstraints x="210" y="150" width="60" height="50"/>
         </Constraint>
       </Constraints>
     </Component>

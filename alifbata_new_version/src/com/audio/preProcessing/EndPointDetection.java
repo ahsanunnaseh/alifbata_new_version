@@ -14,11 +14,11 @@ package com.audio.preProcessing;
  */
 public class EndPointDetection {
 
-	private float[] originalSignal; // input
+	private final float[] originalSignal; // input
 	private float[] silenceRemovedSignal;// output
-	private int samplingRate;
-	private int firstSamples;
-	private int samplePerFrame;
+	private final int samplingRate;
+	private final int firstSamples;
+	private final int samplePerFrame;
 
 	public EndPointDetection(float[] originalSignal, int samplingRate) {
 		this.originalSignal = originalSignal;

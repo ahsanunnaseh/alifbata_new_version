@@ -5,16 +5,11 @@
   Email : gtiwari333@gmail.com,
   Blog : http://ganeshtiwaridotcomdotnp.blogspot.com/ 
  */
-package com.audio;
+package com.audio.preProcessing;
 
-import com.audio.preProcessing.EndPointDetection;
+import com.util.ArrayWriter;
 
-/**
- * pre-processing steps
- * 
- * @author Ganesh Tiwari
- * 
- */
+
 public class PreProcess {
 
 	float[] originalSignal;// initial extracted PCM,
@@ -30,8 +25,8 @@ public class PreProcess {
 	/**
 	 * constructor, all steps are called frm here
 	 * 
-	 * @param audioData
-	 *            extracted PCM data
+     * @param originalSignal
+     * @param samplingRate
 	 * @param samplePerFrame
 	 *            how many samples in one frame,=660 << frameDuration, typically
 	 *            30; samplingFreq, typically 22Khz
@@ -44,7 +39,7 @@ public class PreProcess {
 		normalizePCM();
 		epd = new EndPointDetection(this.originalSignal, this.samplingRate);
 		afterEndPtDetection = epd.doEndPointDetection();
-		// ArrayWriter.printFloatArrayToFile(afterEndPtDetection, "endPt.txt");
+		 ArrayWriter.printFloatArrayToConole(afterEndPtDetection);
 		doFraming();
 		doWindowing();
 	}
@@ -69,6 +64,7 @@ public class PreProcess {
 		// calculate no of frames, for framing
 
 		noOfFrames = 2 * afterEndPtDetection.length / samplePerFrame - 1;
+             
 		System.out.println("noOfFrames       " + noOfFrames + "  samplePerFrame     " + samplePerFrame + "  EPD length   "
 				+ afterEndPtDetection.length);
 		framedSignal = new float[noOfFrames][samplePerFrame];
@@ -83,7 +79,7 @@ public class PreProcess {
 	/**
 	 * does hamming window on each frame
 	 */
-	private void doWindowing() {
+	private  float [] [] doWindowing() {
 		// prepare hammingWindow
 		hammingWindow = new float[samplePerFrame + 1];
 		// prepare for through out the data
@@ -97,5 +93,9 @@ public class PreProcess {
 				framedSignal[i][j] = framedSignal[i][j] * hammingWindow[j + 1];
 			}
 		}
+                return framedSignal;
 	}
+    public float [][] getFloatDataArray(){
+        return framedSignal;
+    }    
 }

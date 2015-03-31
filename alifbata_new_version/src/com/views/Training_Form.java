@@ -62,12 +62,12 @@ public class Training_Form extends JFrame implements ActionListener {
     float[] audioData = null;
     final int BUFFER_SIZE = 16384;
     int counter = 0;
-    FormatControlConf formatControls = new FormatControlConf(); // @jve:decl-index=0:
-    Capture capture = new Capture(); // @jve:decl-index=0:
-    Playback playback = new Playback(); // @jve:decl-index=0:
-    Vector<Line2D.Double> lines = new Vector<Line2D.Double>(); // @jve:decl-index=0:
-    AudioInputStream audioInputStream; // @jve:decl-index=0:
-    File file; // @jve:decl-index=0:
+    FormatControlConf formatControls = new FormatControlConf(); 
+    Capture capture = new Capture(); 
+    Playback playback = new Playback(); 
+    Vector<Line2D.Double> lines = new Vector<>(); 
+    AudioInputStream audioInputStream; 
+    File file; 
     SamplingGraph samplingGraph;
     WaveData wd;
 
@@ -87,11 +87,8 @@ public class Training_Form extends JFrame implements ActionListener {
 
         if (isDrawingRequired) {
             JPanel samplingPanel = new JPanel(new BorderLayout());
-//                        EmptyBorder eb = new EmptyBorder(1, 1, 1, 1);
-//			SoftBevelBorder sbb = new SoftBevelBorder(SoftBevelBorder.LOWERED);
-//			samplingPanel.setBorder(new CompoundBorder(eb, sbb));
             samplingPanel.add(samplingGraph = new SamplingGraph());
-            samplingPanel.setBackground(new java.awt.Color(29, 13, 13));
+            samplingPanel.setBackground(java.awt.Color.white);
             samplingPanel.setBounds(20, 260, 610, 110);
             add(samplingPanel);
         }
@@ -362,14 +359,14 @@ public class Training_Form extends JFrame implements ActionListener {
         playB.setEnabled(false);
         playB.setFocusable(false);
 
-        saveB.setText("Save");
+        saveB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/sukses.jpg"))); // NOI18N
         saveB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveBActionPerformed(evt);
             }
         });
         getContentPane().add(saveB);
-        saveB.setBounds(290, 160, 80, 23);
+        saveB.setBounds(210, 150, 60, 50);
         saveB.setPreferredSize(new Dimension(85, 24));
         saveB.addActionListener(this);
         saveB.setEnabled(false);
