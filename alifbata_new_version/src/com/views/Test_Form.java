@@ -443,24 +443,30 @@ public class Test_Form extends JFrame implements ActionListener {
             }
             audioBytes = out.toByteArray();
             float[] audioFloatBytes = convertToFloat(audioBytes);
-            double [] audioDouble=convertFloatsToDoubles(audioFloatBytes);
-            double [] fix=extractFeatures(audioDouble, 44100);
-            System.out.println(Arrays.toString(fix));
+            System.out.println("panjang frame input audioFloatBytes : " +audioFloatBytes.length);
+            double[] audioDouble = convertFloatsToDoubles(audioFloatBytes);
+            System.out.println("panjang frame input audioDouble : " +audioDouble.length);
+            double[] fix = extractFeatures(audioDouble, 44100);
+            System.out.println("panjang frame input fix : " +fix.length);
+            float [] inputFFT=convertDoublesToFloats(fix);
+            FFT fft = new FFT(1024, 44100);
+            System.out.println("panjang frame input fft : " +inputFFT.length);
+                           fft.forward(inputFFT);
+                float[] datasample_fft2 = fft.inverse(inputFFT);
+                System.out.println(Arrays.toString(datasample_fft2));
             
   //          System.out.println("SEBELUM : " + audioFloatBytes.length);
-
 //            AutocorrellatedVoiceActivityDetector avad=new AutocorrellatedVoiceActivityDetector();
 //            float[]  floatData= avad.removeSilence(audioFloatBytes, 44100);
             //S         System.out.println(Arrays.toString(audioFloatBytes));
-          //  PreProcess preprocess = new PreProcess(audioFloatBytes, 1024, 44100);
-         //   float floatData[][] = preprocess.getFloatDataArray();
+            //  PreProcess preprocess = new PreProcess(audioFloatBytes, 1024, 44100);
+            //   float floatData[][] = preprocess.getFloatDataArray();
 //            FFT fft = new FFT(1024, 44100);
 //            for (int i = 0; i < floatData[0].length; i++) {
 //                fft.forward(floatData[i]);
 //                float[] datasample_fft2 = fft.inverse(floatData[i]);
 //                System.out.println(Arrays.toString(datasample_fft2));
 //            }
-
             ByteArrayInputStream bais = new ByteArrayInputStream(audioBytes);
             audioInputStream = new AudioInputStream(bais, format, audioBytes.length / frameSizeInBytes);
 
@@ -501,12 +507,20 @@ public class Test_Form extends JFrame implements ActionListener {
         return output;
     }
 
+    public static float[] convertDoublesToFloats(double [] input) {
+        float[] floatArray = new float[input.length];
+        for (int i = 0; i < input.length; i++) {
+            floatArray[i] = (float) input[i];
+        }
+        return floatArray;
+    }
+
     private double[] extractFeatures(double[] voiceSample, float sampleRate) {
 
         AutocorrellatedVoiceActivityDetector voiceDetector = new AutocorrellatedVoiceActivityDetector();
         Normalizer normalizer = new Normalizer();
-        FeaturesExtractor<double[]> lpcExtractor = new LpcFeaturesExtractor(sampleRate, 20);
-
+        FeaturesExtractor<double[]> lpcExtractor = new LpcFeaturesExtractor(sampleRate, 1024);
+   
         voiceDetector.removeSilence(voiceSample, sampleRate);
         normalizer.normalize(voiceSample, sampleRate);
         double[] lpcFeatures = lpcExtractor.extractFeatures(voiceSample);
