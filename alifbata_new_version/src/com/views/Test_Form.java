@@ -6,10 +6,13 @@ import com.audio.wavProcessing.WaveData;
 import com.util.Error_Message;
 import com.util.Image_Processing;
 import com.util.MessageType;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Line2D;
@@ -19,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,9 +33,18 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
+import javax.swing.AbstractAction;
+import static javax.swing.Action.LARGE_ICON_KEY;
+import static javax.swing.Action.SHORT_DESCRIPTION;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingWorker;
 
 /**
  *
@@ -41,15 +54,13 @@ public class Test_Form extends JFrame implements ActionListener {
 
     private final Error_Message error_message;
 
-
-
     byte[] audioBytes = null;
     float[] audioData = null;
     final int BUFFER_SIZE = 16384;
     int counter = 0;
     FormatControlConf formatControls = new FormatControlConf(); // @jve:decl-index=0:
     Capture capture = new Capture(); // @jve:decl-index=0:
-
+    private MissingIcon placeholderIcon = new MissingIcon();
     Vector<Line2D.Double> lines = new Vector<Line2D.Double>(); // @jve:decl-index=0:
     AudioInputStream audioInputStream; // @jve:decl-index=0:
     File file; // @jve:decl-index=0:
@@ -63,22 +74,91 @@ public class Test_Form extends JFrame implements ActionListener {
     double duration, seconds;
     JVisualizer samplingPanel = new JVisualizer();
 
+    private String[] imageCaptions = {"Previous", "Huruf Hijaiyah : Alif",
+        "Huruf Hijaiyah : Ba' ", "Huruf Hijaiyah : Ta'", "Next"};
+
+    private String[] imageFileNames = {"/com/resources/previousb.jpg", "/com/resources/home_icon.jpg",
+        "/com/resources/home_icon.jpg", "/com/resources/home_icon.jpg", "/com/resources/nextb.jpg"};
+
     public Test_Form(boolean isDrawingRequired, boolean isSaveRequired) throws IOException {
         wd = new WaveData();
         this.isDrawingRequired = isDrawingRequired;
         this.isSaveRequired = isSaveRequired;
         initComponents();
         error_message = new Error_Message();
-        File aa=new File("audio_image/level1_sdd.jpg");
+        File aa = new File("audio_image/level1_sdd.jpg");
         setImage(aa);
         if (isDrawingRequired) {
 
             samplingPanel.add(samplingGraph = new SamplingGraph());
-       //     samplingPanel.setBackground(new java.awt.Color(29, 13, 13));
-        //    samplingPanel.setBounds(20, 260, 610, 110);
-         //   add(samplingPanel);
+            samplingPanel.setBackground(new java.awt.Color(29, 13, 13));
+            samplingPanel.setBounds(20, 340, 600, 90);
+            add(samplingPanel);
         }
 
+        lbgambar.setVerticalTextPosition(JLabel.BOTTOM);
+        lbgambar.setHorizontalTextPosition(JLabel.CENTER);
+        lbgambar.setHorizontalAlignment(JLabel.CENTER);
+        lbgambar.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        Buttonbar.add(Box.createGlue());
+        Buttonbar.add(Box.createGlue());
+
+        add(Buttonbar, BorderLayout.SOUTH);
+        add(Buttonbar, BorderLayout.CENTER);
+        loadimages.execute();
+
+    }
+    private SwingWorker<Void, Test_Form.ThumbnailAction> loadimages = new SwingWorker<Void, Test_Form.ThumbnailAction>() {
+        @Override
+        protected Void doInBackground() throws Exception {
+            for (int i = 0; i < imageCaptions.length; i++) {
+                ImageIcon icon;
+                icon = createImageIcon(imageFileNames[i], imageCaptions[i]);
+
+                Test_Form.ThumbnailAction thumbAction;
+                if (icon != null) {
+
+                    ImageIcon thumbnailIcon = new ImageIcon(getScaledImage(icon.getImage(), 32, 32));
+
+                    thumbAction = new Test_Form.ThumbnailAction(icon, thumbnailIcon, imageCaptions[i]);
+
+                } else {
+                    // the image failed to load for some reason
+                    // so load a placeholder instead
+                    thumbAction = new Test_Form.ThumbnailAction(placeholderIcon, placeholderIcon, imageCaptions[i]);
+                }
+                publish(thumbAction);
+            }
+            return null;
+        }
+
+        @Override
+        protected void process(List<Test_Form.ThumbnailAction> chunks) {
+            for (Test_Form.ThumbnailAction thumbAction : chunks) {
+                JButton thumbButton = new JButton(thumbAction);
+                Buttonbar.add(thumbButton, Buttonbar.getComponentCount() - 1);
+            }
+        }
+    };
+
+    protected ImageIcon createImageIcon(String path,
+            String description) {
+        java.net.URL imgURL = getClass().getResource(path);
+        if (imgURL != null) {
+            return new ImageIcon(imgURL, description);
+        } else {
+            System.err.println("Couldn't find file: " + path);
+            return null;
+        }
+    }
+
+    private Image getScaledImage(Image srcImg, int w, int h) {
+        BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2 = resizedImg.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2.drawImage(srcImg, 0, 0, w, h, null);
+        g2.dispose();
+        return resizedImg;
     }
 
     public void setImage(File file) throws IOException {
@@ -89,7 +169,6 @@ public class Test_Form extends JFrame implements ActionListener {
         BufferedImage img = (BufferedImage) image;
         ImageIcon icon = new ImageIcon(img); // ADDED
         lbgambar.setIcon(icon); // ADDED
-
 
         Dimension imageSize = new Dimension(lbgambar.getWidth(), lbgambar.getHeight()); // ADDED
         lbgambar.setPreferredSize(imageSize); // ADDED
@@ -146,10 +225,13 @@ public class Test_Form extends JFrame implements ActionListener {
         System.out.println("actionPerformed *********");
         Object obj = e.getSource();
 
-        if (captB.getText().startsWith("Record")) {
+        if (captB.getToolTipText().startsWith("Play")) {
+            captB.setToolTipText("Stop");
             startRecord();
         } else {
             stopRecording();
+            captB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/playtest.jpg"))); // NOI18N
+            captB.setToolTipText("Play");
         }
     }
 
@@ -159,7 +241,9 @@ public class Test_Form extends JFrame implements ActionListener {
         if (isDrawingRequired) {
             samplingGraph.start();
         }
-        captB.setText("Stop");
+        captB.setToolTipText("Stop");
+        captB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/stoptest.jpg"))); // NOI18N
+        
     }
 
     public void stopRecording() {
@@ -168,7 +252,8 @@ public class Test_Form extends JFrame implements ActionListener {
         if (isDrawingRequired) {
             samplingGraph.stop();
         }
-        captB.setText("Record");
+        captB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/playtest.jpg"))); 
+        captB.setToolTipText("Play");
     }
 
     /**
@@ -183,27 +268,26 @@ public class Test_Form extends JFrame implements ActionListener {
         captB = new javax.swing.JButton();
         lbgambar = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
+        Buttonbar = new javax.swing.JToolBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
 
         captB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/playtest.jpg"))); // NOI18N
+        captB.setToolTipText("Play");
         captB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 captBActionPerformed(evt);
             }
         });
         getContentPane().add(captB);
-        captB.setBounds(30, 210, 90, 80);
+        captB.setBounds(90, 150, 90, 80);
         captB.setPreferredSize(new Dimension(85, 24));
         captB.addActionListener(this);
         captB.setEnabled(true);
@@ -213,51 +297,42 @@ public class Test_Form extends JFrame implements ActionListener {
         lbgambar.setForeground(new java.awt.Color(46, 54, 46));
         lbgambar.setOpaque(true);
         getContentPane().add(lbgambar);
-        lbgambar.setBounds(140, 80, 200, 220);
+        lbgambar.setBounds(220, 20, 200, 220);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(null);
-
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/previousb.jpg"))); // NOI18N
-        jPanel1.add(jButton1);
-        jButton1.setBounds(10, 20, 50, 50);
-
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/nextb.jpg"))); // NOI18N
-        jPanel1.add(jButton2);
-        jButton2.setBounds(550, 20, 50, 50);
-
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(10, 320, 610, 100);
+        jPanel1.setBounds(20, 340, 600, 90);
 
         jPanel2.setBackground(java.awt.Color.green);
         jPanel2.setLayout(null);
 
         jLabel1.setText("100");
         jPanel2.add(jLabel1);
-        jLabel1.setBounds(90, 10, 18, 14);
+        jLabel1.setBounds(90, 10, 27, 17);
 
         jLabel2.setText("Skor");
         jPanel2.add(jLabel2);
-        jLabel2.setBounds(10, 10, 50, 14);
+        jLabel2.setBounds(10, 10, 50, 17);
 
         getContentPane().add(jPanel2);
-        jPanel2.setBounds(440, 160, 180, 30);
+        jPanel2.setBounds(440, 90, 180, 30);
 
         jPanel4.setBackground(java.awt.Color.green);
         getContentPane().add(jPanel4);
-        jPanel4.setBounds(440, 200, 180, 30);
+        jPanel4.setBounds(440, 130, 180, 30);
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/homeb.jpg"))); // NOI18N
         getContentPane().add(jButton3);
-        jButton3.setBounds(590, 0, 50, 50);
+        jButton3.setBounds(600, 0, 50, 50);
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/soundb.jpg"))); // NOI18N
         getContentPane().add(jButton4);
         jButton4.setBounds(0, 0, 50, 50);
 
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        getContentPane().add(jPanel3);
-        jPanel3.setBounds(360, 240, 260, 60);
+        Buttonbar.setRollover(true);
+        getContentPane().add(Buttonbar);
+        Buttonbar.setBounds(20, 250, 590, 70);
 
         setBounds(0, 0, 656, 481);
     }// </editor-fold>//GEN-END:initComponents
@@ -389,6 +464,26 @@ public class Test_Form extends JFrame implements ActionListener {
         }
     }
 
+    private class ThumbnailAction extends AbstractAction {
+
+        private Icon displayPhoto;
+
+        public ThumbnailAction(Icon photo, Icon thumb, String desc) {
+            displayPhoto = photo;
+            putValue(SHORT_DESCRIPTION, desc);
+            putValue(LARGE_ICON_KEY, thumb);
+        }
+
+        /**
+         * Shows the full image in the main area and sets the application title.
+         */
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            lbgambar.setIcon(displayPhoto);
+            setTitle("Icon Demo: " + getValue(SHORT_DESCRIPTION).toString());
+        }
+    }
+
     class SamplingGraph extends JPanel implements Runnable {
 
         private static final long serialVersionUID = 1L;
@@ -504,16 +599,14 @@ public class Test_Form extends JFrame implements ActionListener {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToolBar Buttonbar;
     private javax.swing.JButton captB;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JLabel lbgambar;
     // End of variables declaration//GEN-END:variables
