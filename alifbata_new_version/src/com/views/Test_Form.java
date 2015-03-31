@@ -74,9 +74,9 @@ public class Test_Form extends JFrame implements ActionListener {
         if (isDrawingRequired) {
 
             samplingPanel.add(samplingGraph = new SamplingGraph());
-            samplingPanel.setBackground(new java.awt.Color(29, 13, 13));
-            samplingPanel.setBounds(20, 260, 610, 110);
-            add(samplingPanel);
+       //     samplingPanel.setBackground(new java.awt.Color(29, 13, 13));
+        //    samplingPanel.setBounds(20, 260, 610, 110);
+         //   add(samplingPanel);
         }
 
     }
@@ -191,6 +191,7 @@ public class Test_Form extends JFrame implements ActionListener {
         jPanel4 = new javax.swing.JPanel();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
@@ -202,7 +203,7 @@ public class Test_Form extends JFrame implements ActionListener {
             }
         });
         getContentPane().add(captB);
-        captB.setBounds(30, 230, 80, 80);
+        captB.setBounds(30, 210, 90, 80);
         captB.setPreferredSize(new Dimension(85, 24));
         captB.addActionListener(this);
         captB.setEnabled(true);
@@ -212,7 +213,7 @@ public class Test_Form extends JFrame implements ActionListener {
         lbgambar.setForeground(new java.awt.Color(46, 54, 46));
         lbgambar.setOpaque(true);
         getContentPane().add(lbgambar);
-        lbgambar.setBounds(180, 100, 190, 200);
+        lbgambar.setBounds(140, 80, 200, 220);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(null);
@@ -240,11 +241,11 @@ public class Test_Form extends JFrame implements ActionListener {
         jLabel2.setBounds(10, 10, 50, 14);
 
         getContentPane().add(jPanel2);
-        jPanel2.setBounds(130, 10, 130, 30);
+        jPanel2.setBounds(440, 160, 180, 30);
 
         jPanel4.setBackground(java.awt.Color.green);
         getContentPane().add(jPanel4);
-        jPanel4.setBounds(360, 10, 90, 30);
+        jPanel4.setBounds(440, 200, 180, 30);
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/homeb.jpg"))); // NOI18N
         getContentPane().add(jButton3);
@@ -253,6 +254,10 @@ public class Test_Form extends JFrame implements ActionListener {
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/soundb.jpg"))); // NOI18N
         getContentPane().add(jButton4);
         jButton4.setBounds(0, 0, 50, 50);
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        getContentPane().add(jPanel3);
+        jPanel3.setBounds(360, 240, 260, 60);
 
         setBounds(0, 0, 656, 481);
     }// </editor-fold>//GEN-END:initComponents
@@ -508,6 +513,7 @@ public class Test_Form extends JFrame implements ActionListener {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JLabel lbgambar;
     // End of variables declaration//GEN-END:variables

@@ -72,7 +72,7 @@ public class IconDemoApp extends JFrame {
     /**
      * List of all the image files to load.
      */
-    private String[] imageFileNames = { "home_button.png", "/com/resources/home_icon.jpg",
+    private String[] imageFileNames = { "/home_button.png", "/com/resources/home_icon.jpg",
     "sunw03.jpg", "sunw04.jpg", "sunw05.jpg"};  
     
     /**
@@ -234,6 +234,7 @@ public class IconDemoApp extends JFrame {
         /**
          * Shows the full image in the main area and sets the application title.
          */
+        @Override
         public void actionPerformed(ActionEvent e) {
             photographLabel.setIcon(displayPhoto);
             setTitle("Icon Demo: " + getValue(SHORT_DESCRIPTION).toString());

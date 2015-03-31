@@ -122,14 +122,16 @@
     </Component>
     <Component class="javax.swing.JButton" name="playB">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Play"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/com/resources/playb.jpg"/>
+        </Property>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="playB.setPreferredSize(new Dimension(85, 24));&#xa;playB.addActionListener(this);&#xa;playB.setEnabled(false);&#xa;playB.setFocusable(false);"/>
       </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="200" y="160" width="80" height="-1"/>
+          <AbsoluteConstraints x="150" y="150" width="50" height="50"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -151,7 +153,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="captB">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Record"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/com/resources/repeatb.jpg"/>
+        </Property>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="captBActionPerformed"/>
@@ -161,20 +165,22 @@
       </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="20" y="160" width="80" height="-1"/>
+          <AbsoluteConstraints x="30" y="150" width="50" height="50"/>
         </Constraint>
       </Constraints>
     </Component>
     <Component class="javax.swing.JButton" name="pausB">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Pause"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/com/resources/pauseb.jpg"/>
+        </Property>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="pausB.setPreferredSize(new Dimension(85, 24));&#xa;pausB.addActionListener(this);&#xa;pausB.setEnabled(false);&#xa;pausB.setFocusable(false);"/>
       </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="110" y="160" width="80" height="-1"/>
+          <AbsoluteConstraints x="90" y="150" width="50" height="50"/>
         </Constraint>
       </Constraints>
     </Component>

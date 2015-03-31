@@ -354,9 +354,9 @@ public class Training_Form extends JFrame implements ActionListener {
         getContentPane().add(txpath);
         txpath.setBounds(130, 110, 200, 25);
 
-        playB.setText("Play");
+        playB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/playb.jpg"))); // NOI18N
         getContentPane().add(playB);
-        playB.setBounds(200, 160, 80, 23);
+        playB.setBounds(150, 150, 50, 50);
         playB.setPreferredSize(new Dimension(85, 24));
         playB.addActionListener(this);
         playB.setEnabled(false);
@@ -375,22 +375,22 @@ public class Training_Form extends JFrame implements ActionListener {
         saveB.setEnabled(false);
         saveB.setFocusable(false);
 
-        captB.setText("Record");
+        captB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/repeatb.jpg"))); // NOI18N
         captB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 captBActionPerformed(evt);
             }
         });
         getContentPane().add(captB);
-        captB.setBounds(20, 160, 80, 23);
+        captB.setBounds(30, 150, 50, 50);
         captB.setPreferredSize(new Dimension(85, 24));
         captB.addActionListener(this);
         captB.setEnabled(true);
         captB.setFocusable(false);
 
-        pausB.setText("Pause");
+        pausB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/pauseb.jpg"))); // NOI18N
         getContentPane().add(pausB);
-        pausB.setBounds(110, 160, 80, 23);
+        pausB.setBounds(90, 150, 50, 50);
         pausB.setPreferredSize(new Dimension(85, 24));
         pausB.addActionListener(this);
         pausB.setEnabled(false);
