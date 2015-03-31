@@ -1,5 +1,9 @@
 package com.views;
 
+import com.audio.preProcessing.AutocorrellatedVoiceActivityDetector;
+import com.audio.preProcessing.FeaturesExtractor;
+import com.audio.preProcessing.LpcFeaturesExtractor;
+import com.audio.preProcessing.Normalizer;
 import com.audio.preProcessing.PreProcess;
 import com.audio.processing.FFT;
 import com.audio.wavProcessing.FormatControlConf;
@@ -62,7 +66,7 @@ public class Test_Form extends JFrame implements ActionListener {
     FormatControlConf formatControls = new FormatControlConf(); // @jve:decl-index=0:
     Capture capture = new Capture(); // @jve:decl-index=0:
     private MissingIcon placeholderIcon = new MissingIcon();
-    Vector<Line2D.Double> lines = new Vector<Line2D.Double>(); // @jve:decl-index=0:
+    Vector<Line2D.Double> lines = new Vector<>(); // @jve:decl-index=0:
     AudioInputStream audioInputStream; // @jve:decl-index=0:
     File file; // @jve:decl-index=0:
     SamplingGraph samplingGraph;
@@ -88,7 +92,7 @@ public class Test_Form extends JFrame implements ActionListener {
         initComponents();
         error_message = new Error_Message();
         File aa = new File("audio_image/level1_sdd.jpg");
-        setImage(aa);
+        //  setImage(aa);
         if (isDrawingRequired) {
 
             samplingPanel.add(samplingGraph = new SamplingGraph());
@@ -374,11 +378,6 @@ public class Test_Form extends JFrame implements ActionListener {
             }
         }
 
-        /*
-         * (non-Javadoc)
-         * 
-         * @see java.lang.Runnable#run()
-         */
         @Override
         public void run() {
 
@@ -444,17 +443,23 @@ public class Test_Form extends JFrame implements ActionListener {
             }
             audioBytes = out.toByteArray();
             float[] audioFloatBytes = convertToFloat(audioBytes);
-            System.out.println("SEBELUM : " + audioFloatBytes.length);
-            PreProcess preprocess=new PreProcess(audioFloatBytes, 1024, 44100);
-            float floatData [][]=preprocess.getFloatDataArray();
-            FFT fft = new FFT(1024, 44100);
-            for(int i=0; i<floatData[0].length; i++){
-                fft.forward(floatData[i]);
-                float [] datasample_fft2 = fft.inverse(floatData[i]);
-                System.out.println(Arrays.toString(datasample_fft2));
-            }
-     
+            double [] audioDouble=convertFloatsToDoubles(audioFloatBytes);
+            double [] fix=extractFeatures(audioDouble, 44100);
+            System.out.println(Arrays.toString(fix));
+            
+  //          System.out.println("SEBELUM : " + audioFloatBytes.length);
 
+//            AutocorrellatedVoiceActivityDetector avad=new AutocorrellatedVoiceActivityDetector();
+//            float[]  floatData= avad.removeSilence(audioFloatBytes, 44100);
+            //S         System.out.println(Arrays.toString(audioFloatBytes));
+          //  PreProcess preprocess = new PreProcess(audioFloatBytes, 1024, 44100);
+         //   float floatData[][] = preprocess.getFloatDataArray();
+//            FFT fft = new FFT(1024, 44100);
+//            for (int i = 0; i < floatData[0].length; i++) {
+//                fft.forward(floatData[i]);
+//                float[] datasample_fft2 = fft.inverse(floatData[i]);
+//                System.out.println(Arrays.toString(datasample_fft2));
+//            }
 
             ByteArrayInputStream bais = new ByteArrayInputStream(audioBytes);
             audioInputStream = new AudioInputStream(bais, format, audioBytes.length / frameSizeInBytes);
@@ -478,11 +483,35 @@ public class Test_Form extends JFrame implements ActionListener {
 
         float[] asFloat = new float[bytes.length];
         for (int i = 0; i < bytes.length; i++) {
-            int qw = ((bytes[i] & 0xFF) << 16);
+            int qw = ((bytes[i] & 0xFF) << 8);
             asFloat[i] = Float.intBitsToFloat(qw);
         }
 
         return asFloat;
+    }
+
+    public static double[] convertFloatsToDoubles(float[] input) {
+        if (input == null) {
+            return null; // Or throw an exception - your choice
+        }
+        double[] output = new double[input.length];
+        for (int i = 0; i < input.length; i++) {
+            output[i] = input[i];
+        }
+        return output;
+    }
+
+    private double[] extractFeatures(double[] voiceSample, float sampleRate) {
+
+        AutocorrellatedVoiceActivityDetector voiceDetector = new AutocorrellatedVoiceActivityDetector();
+        Normalizer normalizer = new Normalizer();
+        FeaturesExtractor<double[]> lpcExtractor = new LpcFeaturesExtractor(sampleRate, 20);
+
+        voiceDetector.removeSilence(voiceSample, sampleRate);
+        normalizer.normalize(voiceSample, sampleRate);
+        double[] lpcFeatures = lpcExtractor.extractFeatures(voiceSample);
+
+        return lpcFeatures;
     }
 
     private class ThumbnailAction extends AbstractAction {
@@ -507,10 +536,6 @@ public class Test_Form extends JFrame implements ActionListener {
         private static final long serialVersionUID = 1L;
 
         private Thread thread;
-        private Font font10 = new Font("serif", Font.PLAIN, 10);
-        private Font font12 = new Font("serif", Font.PLAIN, 12);
-        Color jfcBlue = new Color(204, 204, 255);
-        Color pink = new Color(255, 175, 175);
         AudioFormat format;
 
         public SamplingGraph() {

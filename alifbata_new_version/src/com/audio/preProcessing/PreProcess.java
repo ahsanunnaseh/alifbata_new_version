@@ -8,6 +8,7 @@
 package com.audio.preProcessing;
 
 import com.util.ArrayWriter;
+import java.util.Arrays;
 
 
 public class PreProcess {
@@ -32,6 +33,7 @@ public class PreProcess {
 	 *            30; samplingFreq, typically 22Khz
 	 */
 	public PreProcess(float[] originalSignal, int samplePerFrame, int samplingRate) {
+           
 		this.originalSignal = originalSignal;
 		this.samplePerFrame = samplePerFrame;
 		this.samplingRate = samplingRate;
@@ -39,7 +41,8 @@ public class PreProcess {
 		normalizePCM();
 		epd = new EndPointDetection(this.originalSignal, this.samplingRate);
 		afterEndPtDetection = epd.doEndPointDetection();
-		 ArrayWriter.printFloatArrayToConole(afterEndPtDetection);
+                 System.out.println(Arrays.toString(afterEndPtDetection));
+		// ArrayWriter.printFloatArrayToConole(afterEndPtDetection);
 		doFraming();
 		doWindowing();
 	}
@@ -62,7 +65,7 @@ public class PreProcess {
 	 */
 	private void doFraming() {
 		// calculate no of frames, for framing
-
+                System.out.println("panjang  after : " + afterEndPtDetection.length);
 		noOfFrames = 2 * afterEndPtDetection.length / samplePerFrame - 1;
       
 		System.out.println("noOfFrames       " + noOfFrames + "  samplePerFrame     " + samplePerFrame + "  EPD length   "

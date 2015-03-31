@@ -6,7 +6,7 @@
 package com.audio.processing;
 
 
-import com.komponent.AutocorrellatedVoiceActivityDetector;
+import com.audio.preProcessing.AutocorrellatedVoiceActivityDetector;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -69,7 +69,7 @@ public class FourierTransformReconstruction {
         float[] datasample = new float[limit];
         while (decoder.readSamples(samples) > 0) {
             AutocorrellatedVoiceActivityDetector avd=new AutocorrellatedVoiceActivityDetector();
-            samples=avd.removeSilence(datasample, SAMPLE_RATE);
+          //  samples=avd.removeSilence(datasample, SAMPLE_RATE);
    
          //   avd.removeSilence(voiceSample, limit);
             fft.forward(samples);
