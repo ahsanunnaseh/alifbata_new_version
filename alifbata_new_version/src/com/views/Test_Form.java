@@ -4,7 +4,6 @@ import com.audio.preProcessing.AutocorrellatedVoiceActivityDetector;
 import com.audio.preProcessing.FeaturesExtractor;
 import com.audio.preProcessing.LpcFeaturesExtractor;
 import com.audio.preProcessing.Normalizer;
-import com.audio.preProcessing.PreProcess;
 import com.audio.processing.FFT;
 import com.audio.wavProcessing.FormatControlConf;
 import com.audio.wavProcessing.WaveData;
@@ -12,9 +11,7 @@ import com.util.Error_Message;
 import com.util.Image_Processing;
 import com.util.MessageType;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
@@ -517,13 +514,17 @@ public class Test_Form extends JFrame implements ActionListener {
 
     private double[] extractFeatures(double[] voiceSample, float sampleRate) {
 
-        AutocorrellatedVoiceActivityDetector voiceDetector = new AutocorrellatedVoiceActivityDetector();
+     //   AutocorrellatedVoiceActivityDetector voiceDetector = new AutocorrellatedVoiceActivityDetector();
+      //  double [] voice=voiceDetector.removeSilence(voiceSample, sampleRate);
+        
+   //     System.out.println("Voice : "+voice.length);
         Normalizer normalizer = new Normalizer();
-        FeaturesExtractor<double[]> lpcExtractor = new LpcFeaturesExtractor(sampleRate, 1024);
-   
-        voiceDetector.removeSilence(voiceSample, sampleRate);
         normalizer.normalize(voiceSample, sampleRate);
+        
+        FeaturesExtractor<double[]> lpcExtractor = new LpcFeaturesExtractor(sampleRate, 1024);
         double[] lpcFeatures = lpcExtractor.extractFeatures(voiceSample);
+        
+        
 
         return lpcFeatures;
     }
