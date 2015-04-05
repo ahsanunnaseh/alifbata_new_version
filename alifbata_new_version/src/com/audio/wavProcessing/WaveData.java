@@ -4,12 +4,20 @@
  by sending me an email before using it or by reporting bugs , i will be happy.
  Email : gtiwari333@gmail.com,
  Blog : http://ganeshtiwaridotcomdotnp.blogspot.com/ 
+ *//*
+ Please feel free to use/modify this class. 
+ If you give me credit by keeping this information or
+ by sending me an email before using it or by reporting bugs , i will be happy.
+ Email : gtiwari333@gmail.com,
+ Blog : http://ganeshtiwaridotcomdotnp.blogspot.com/ 
  */
 package com.audio.wavProcessing;
 
 import com.audio.processing.FFT;
 import javax.sound.sampled.*;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * saving and extracting PCM data from wavefile byteArray
@@ -147,13 +155,13 @@ public class WaveData {
     /**
      * Save to file.
      *
-     * @param name the name
+     * @param path the path
      * @param fileType the file type
      */
-    public void saveToFile(String name, AudioFileFormat.Type fileType, AudioInputStream audioInputStream) {
-        File myFile = new File(name);
+    public void saveToFile(String path, AudioFileFormat.Type fileType, AudioInputStream audioInputStream) {
+        File myFile = new File(path);
         if (!myFile.exists()) {
-            myFile.mkdir();
+            myFile.mkdirs();
         }
 
         if (audioInputStream == null) {
@@ -165,11 +173,11 @@ public class WaveData {
         } catch (Exception e) {
             return;
         }
-        myFile = new File("audio_file/" + name + ".wav");
+        myFile = new File(path + ".wav");
         int i = 0;
         while (myFile.exists()) {
-            String temp = String.format(name + "%d", i++);
-            myFile = new File("audio_file/" + temp + ".wav");
+            String temp = String.format(path + "%d", i++);
+            myFile = new File(temp + ".wav");
         }
         try {
             if (AudioSystem.write(audioInputStream, fileType, myFile) == -1) {
@@ -197,26 +205,42 @@ public class WaveData {
         System.out.println("WAV Audio data saved to " + fileName);
     }
 
-    public void extractFloatDataFromAudioInputStream_saveToTXTFile(String filename, AudioInputStream audioInputStream) {
-        float float_data[] = extractFloatDataFromAudioInputStream(audioInputStream);
-        
-        try {
-            FileWriter fr = new FileWriter("txt_audio_file/" +filename+".txt");
-            BufferedWriter br = new BufferedWriter(fr);
-            PrintWriter out = new PrintWriter(br);
-            for (Float data1 : float_data) {
-                if (data1 != null) {
-                    out.write(String.valueOf(data1));
-                }
-                out.write("\n");
-            }
-            out.close();
-
-        } catch (Exception ex) {
-            System.err.println("Error during saving txt file " + filename + " to disk" + ex.toString());
+    public void extractFloatDataFromAudioInputStream_saveToTXTFile(String path, AudioInputStream audioInputStream) {
+        File myFile = new File(path);
+        if (!myFile.exists()) {
+            myFile.mkdirs();
         }
-        System.out.println("txt Audio data saved to " + filename);
+        if (audioInputStream == null) {
+            return;
+        }
+        System.out.println("path:" + path);
+        float float_data[] = extractFloatDataFromAudioInputStream(audioInputStream);
+        File file = new File(path + ".txt");
+         int i = 0;
+        while (file.exists()) {
+            String temp = String.format(path + "%d", i++);
+            file = new File(temp + ".txt");
+        }
+        if(!file.exists()){
+            PrintWriter fr=null;
+            try {
+                fr = new PrintWriter(file);
+                BufferedWriter br = new BufferedWriter(fr);
+                PrintWriter out = new PrintWriter(br);
+                for (Float data1 : float_data) {
+                    if (data1 != null) {
+                        out.write(String.valueOf(data1));
+                    }
+                    out.write("\n");
+                }   out.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(WaveData.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                fr.close();
+            }
+        }
+
+        System.out.println("txt Audio data saved to " + path);
     }
-    
 
 }

@@ -13,9 +13,16 @@ import java.awt.Toolkit;
  */
 public final class Constants {
 
-    public static final String IMAGE_PATH = "audio_image/";
-    public static final String AUDIO_PATH = "audio_file/";
-    public static final String TXT_AUDIO_PATH = "txt_audio_file";
+    public static final String IMAGE_ROOT_PATH = "audio_image/";
+    public static final String IMAGE_ROOT_PATH_LEVEL2 = "/audio_image/level2/";
+    public static final String IMAGE_ROOT_PATH_LEVEL3 = "/audio_image/level3/";
+    public static final String AUDIO_ROOT_PATH = "audio_file/";
+    public static final String AUDIO_ROOT_PATH_LEVEL2 = "/audio_file/level2";
+    public static final String AUDIO_ROOT_PATH_LEVEL3 = "/audio_file/level3";
+    public static final String TXT_ROOT_AUDIO_PATH= "txt_audio_file/";
+    public static final String TXT_ROOT_AUDIO_PATH_LEVEL2 = "/txt_audio_file/level2/";
+    public static final String TXT_ROOT_AUDIO_PATH_LEVEL3 = "/txt_audio_file/level3/";
+    
     public static Constants instance;
 
     private Constants() {
@@ -29,4 +36,5 @@ public final class Constants {
 
         return instance;
     }
+
 }

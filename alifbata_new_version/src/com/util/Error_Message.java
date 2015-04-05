@@ -5,6 +5,7 @@
  */
 package com.util;
 
+import java.awt.Component;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,8 +18,12 @@ public class Error_Message {
 
     }
 
-    public void confirm_dialog(String title, String message) {
-        JOptionPane.showMessageDialog(null, message, title, JOptionPane.OK_OPTION);
+    public static void confirm_dialog(Component comp, String title, String message) {
+        JOptionPane.showMessageDialog(comp, message, title, JOptionPane.OK_OPTION);
+    }
+    
+     public static void confirm_dialog(String title, String message) {
+        JOptionPane.showMessageDialog(null,message, title, JOptionPane.OK_OPTION);
     }
 
     public static void error_print(String message) {

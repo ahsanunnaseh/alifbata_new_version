@@ -7,6 +7,7 @@ import com.audio.preProcessing.Normalizer;
 import com.audio.processing.FFT;
 import com.audio.wavProcessing.FormatControlConf;
 import com.audio.wavProcessing.WaveData;
+import com.util.DataTypeConversion;
 import com.util.Error_Message;
 import com.util.Image_Processing;
 import com.util.MessageType;
@@ -439,13 +440,13 @@ public class Test_Form extends JFrame implements ActionListener {
                 reportStatus("Error on inputstream", MessageType.ERROR);
             }
             audioBytes = out.toByteArray();
-            float[] audioFloatBytes = convertToFloat(audioBytes);
+            float[] audioFloatBytes = DataTypeConversion.convertToFloat(audioBytes);
             System.out.println("panjang frame input audioFloatBytes : " +audioFloatBytes.length);
-            double[] audioDouble = convertFloatsToDoubles(audioFloatBytes);
+            double[] audioDouble = DataTypeConversion.convertFloatsToDoubles(audioFloatBytes);
             System.out.println("panjang frame input audioDouble : " +audioDouble.length);
             double[] fix = extractFeatures(audioDouble, 44100);
             System.out.println("panjang frame input fix : " +fix.length);
-            float [] inputFFT=convertDoublesToFloats(fix);
+            float [] inputFFT=DataTypeConversion.convertDoublesToFloats(fix);
             FFT fft = new FFT(1024, 44100);
             System.out.println("panjang frame input fft : " +inputFFT.length);
                            fft.forward(inputFFT);
@@ -482,40 +483,9 @@ public class Test_Form extends JFrame implements ActionListener {
         }
     }
 
-    public static float[] convertToFloat(byte[] bytes) {
-
-        float[] asFloat = new float[bytes.length];
-        for (int i = 0; i < bytes.length; i++) {
-            int qw = ((bytes[i] & 0xFF) << 8);
-            asFloat[i] = Float.intBitsToFloat(qw);
-        }
-
-        return asFloat;
-    }
-
-    public static double[] convertFloatsToDoubles(float[] input) {
-        if (input == null) {
-            return null; // Or throw an exception - your choice
-        }
-        double[] output = new double[input.length];
-        for (int i = 0; i < input.length; i++) {
-            output[i] = input[i];
-        }
-        return output;
-    }
-
-    public static float[] convertDoublesToFloats(double [] input) {
-        float[] floatArray = new float[input.length];
-        for (int i = 0; i < input.length; i++) {
-            floatArray[i] = (float) input[i];
-        }
-        return floatArray;
-    }
-
+    
     private double[] extractFeatures(double[] voiceSample, float sampleRate) {
 
-     //   AutocorrellatedVoiceActivityDetector voiceDetector = new AutocorrellatedVoiceActivityDetector();
-      //  double [] voice=voiceDetector.removeSilence(voiceSample, sampleRate);
         
    //     System.out.println("Voice : "+voice.length);
         Normalizer normalizer = new Normalizer();

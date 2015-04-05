@@ -6,6 +6,7 @@
 package com.views;
 
 import java.util.Arrays;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -13,12 +14,12 @@ import java.util.Arrays;
  */
 public class NewClass {
 
-    public void isPowerOfTwodd(int x) {
+    public int isPowerOfTwodd(int x) {
         int[] two = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768,
             65536, 131072, 262144, 524288, 1048576, 2097152, 4194304, 8388608,
             16777216, 33554432, 67108864, 134217728, 268435456, 536870912};
               int [] atas = new int[30];
-            int [] bawah = new int[39];
+            int [] bawah = new int[30];
         for(int i=0; i<two.length; i++){
       
             if(x>two[i]){
@@ -27,9 +28,7 @@ public class NewClass {
               bawah[i]= two[i]; 
             }
         }
-        System.out.println(Arrays.toString(atas));
-        System.out.println(Arrays.toString(bawah));
-        System.out.println("mendekati : " + getMaxValue(atas));
+        return getMaxValue(atas);
 
     }
     public static int getMaxValue(int[] array){  
@@ -43,8 +42,8 @@ public class NewClass {
              return maxValue;  
 }  
     public static void main(String [] args){
-        NewClass nn=new NewClass();
-        nn.isPowerOfTwodd(10000);
+        int a=JOptionPane.showConfirmDialog(null, "Apakah Masih Training Huruf:" , "Informasi", JOptionPane.YES_NO_OPTION);
+        System.out.println("nilai i:" + a );
     }
 
   

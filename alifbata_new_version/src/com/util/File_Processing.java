@@ -25,10 +25,11 @@ import java.util.logging.Logger;
 public class File_Processing {
 
     public static final String DOT_SEPARATOR = ".";
-    
-    public File_Processing(){
-        
+
+    public File_Processing() {
+
     }
+
     public static void doCopy(File source, File dest) throws IOException {
         FileChannel inputChannel = null;
         FileChannel outputChannel = null;
@@ -43,6 +44,22 @@ public class File_Processing {
             outputChannel.close();
         }
     }
+
+    public static boolean createDirectory(String path) {
+        boolean success = (new File(path)).mkdir();
+        return success;
+    }
+    
+    public static boolean createDirectories(String path) {
+        boolean success = (new File(path)).mkdirs();
+        return success;
+    }
+    
+    public static boolean isFileExist(String path){
+        File file=new File(path);
+        return file.exists();
+    }
+
 
     public static String getFileExtension(File file) {
         if (file == null) {

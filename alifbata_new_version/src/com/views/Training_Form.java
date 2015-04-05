@@ -1,5 +1,3 @@
-
-
 package com.views;
 
 import com.audio.wavProcessing.FormatControlConf;
@@ -57,17 +55,18 @@ import javax.swing.JPanel;
 public class Training_Form extends JFrame implements ActionListener {
 
     private final Error_Message error_message;
+    private final File_Processing fileProcessing = new File_Processing();
 
     byte[] audioBytes = null;
     float[] audioData = null;
     final int BUFFER_SIZE = 16384;
     int counter = 0;
-    FormatControlConf formatControls = new FormatControlConf(); 
-    Capture capture = new Capture(); 
-    Playback playback = new Playback(); 
-    Vector<Line2D.Double> lines = new Vector<>(); 
-    AudioInputStream audioInputStream; 
-    File file; 
+    FormatControlConf formatControls = new FormatControlConf();
+    Capture capture = new Capture();
+    Playback playback = new Playback();
+    Vector<Line2D.Double> lines = new Vector<>();
+    AudioInputStream audioInputStream;
+    File file;
     SamplingGraph samplingGraph;
     WaveData wd;
 
@@ -83,7 +82,6 @@ public class Training_Form extends JFrame implements ActionListener {
         this.isSaveRequired = isSaveRequired;
         initComponents();
         error_message = new Error_Message();
-   
 
         if (isDrawingRequired) {
             JPanel samplingPanel = new JPanel(new BorderLayout());
@@ -143,27 +141,31 @@ public class Training_Form extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         System.out.println("actionPerformed *********");
         Object obj = e.getSource();
+        // if (!txname.getText().isEmpty() && !txpath.getText().isEmpty()) {
         if (isSaveRequired && obj.equals(saveB)) {
             getFileNameAndSaveFile();
         } else if (obj.equals(playB)) {
-            if (playB.getText().startsWith("Play")) {
+            if (playB.getToolTipText().startsWith("Play")) {
                 playCaptured();
             } else {
                 stopPlaying();
             }
         } else if (obj.equals(captB)) {
-            if (captB.getText().startsWith("Record")) {
+            if (captB.getToolTipText().startsWith("Record")) {
                 startRecord();
             } else {
                 stopRecording();
             }
         } else if (obj.equals(pausB)) {
-            if (pausB.getText().startsWith("Pause")) {
+            if (pausB.getToolTipText().startsWith("Pause")) {
                 pausePlaying();
             } else {
                 resumePlaying();
             }
         }
+//        } else {
+//            Error_Message.confirm_dialog(this, "Informasi", "Anda harus memberi nama dan memilih gambar terlebih dahulu.");
+//        }
     }
 
     public void playCaptured() {
@@ -173,7 +175,8 @@ public class Training_Form extends JFrame implements ActionListener {
         }
         captB.setEnabled(false);
         pausB.setEnabled(true);
-        playB.setText("Stop");
+        playB.setToolTipText("Stop");
+
     }
 
     public void stopPlaying() {
@@ -183,7 +186,8 @@ public class Training_Form extends JFrame implements ActionListener {
         }
         captB.setEnabled(true);
         pausB.setEnabled(false);
-        playB.setText("Play");
+        playB.setToolTipText("Play");
+
     }
 
     public void startRecord() {
@@ -195,7 +199,8 @@ public class Training_Form extends JFrame implements ActionListener {
         playB.setEnabled(false);
         pausB.setEnabled(true);
         saveB.setEnabled(false);
-        captB.setText("Stop");
+        captB.setToolTipText("Stop");
+
     }
 
     public void stopRecording() {
@@ -207,7 +212,8 @@ public class Training_Form extends JFrame implements ActionListener {
         playB.setEnabled(true);
         pausB.setEnabled(false);
         saveB.setEnabled(true);
-        captB.setText("Record");
+        captB.setToolTipText("Record");
+
     }
 
     public void pausePlaying() {
@@ -219,7 +225,7 @@ public class Training_Form extends JFrame implements ActionListener {
                 playback.line.stop();
             }
         }
-        pausB.setText("Resume");
+        pausB.setToolTipText("Resume");
 
     }
 
@@ -231,17 +237,18 @@ public class Training_Form extends JFrame implements ActionListener {
                 playback.line.start();
             }
         }
-        pausB.setText("Pause");
+        pausB.setToolTipText("Pause");
+
     }
 
     private String level_translate(JComboBox combo) {
         String prefix_name = "";
         if (combo.getSelectedItem().toString().equalsIgnoreCase("Level 1")) {
-            prefix_name = "level1_";
+            prefix_name = "level1";
         } else if (combo.getSelectedItem().toString().equalsIgnoreCase("Level 2")) {
-            prefix_name = "level2_";
+            prefix_name = "level2";
         } else if (combo.getSelectedItem().toString().equalsIgnoreCase("Level 3")) {
-            prefix_name = "level3_";
+            prefix_name = "level3";
         } else {
             prefix_name = "error_prefix";
         }
@@ -249,36 +256,49 @@ public class Training_Form extends JFrame implements ActionListener {
     }
 
     public void getFileNameAndSaveFile() {
-        String prefixfile = level_translate(cblevel);
-        if (saveFileName != null && saveFileName.equalsIgnoreCase(prefixfile + txname.getText())) {
-            JOptionPane.showMessageDialog(this, "Apakah Masih Training Huruf:" + txname.getText(), "Informasi", JOptionPane.YES_NO_CANCEL_OPTION);
+        String level = level_translate(cblevel);
+        int iscontinue = 3;
+        String rootPathAudio = Constants.AUDIO_ROOT_PATH + level + "/" + txname.getText();
+        if (saveFileName != null && saveFileName.equalsIgnoreCase(rootPathAudio + "/" + txname.getText())) {
+            iscontinue = JOptionPane.showConfirmDialog(null, "Apakah Masih Training Huruf:" + txname.getText(), "Informasi", JOptionPane.YES_NO_OPTION);
         }
-        while (saveFileName == null || !saveFileName.equalsIgnoreCase(prefixfile + txname.getText())) {
-            saveFileName = JOptionPane.showInputDialog(this, "Apakah Training " + cblevel.getSelectedItem().toString() + " Huruf Hijaiyah berikut :", prefixfile + txname.getText());
+        while (saveFileName == null || !saveFileName.equalsIgnoreCase(Constants.AUDIO_ROOT_PATH + level + "/" + txname.getText() + "/" + txname.getText())) {
+            JOptionPane.showInputDialog(this, "Apakah Training " + cblevel.getSelectedItem().toString() + " Huruf Hijaiyah berikut :", txname.getText());
+            saveFileName = rootPathAudio + "/" + txname.getText();
         }
-        
         wd.saveToFile(saveFileName, AudioFileFormat.Type.WAVE, audioInputStream);
-        wd.extractFloatDataFromAudioInputStream_saveToTXTFile(saveFileName, audioInputStream);
-        float data [] =wd.extractFloatDataFromAudioInputStream(audioInputStream);
-        File source = new File(txpath.getText());
-      
-        
-        String ext=File_Processing.getFileExtension(new File(txpath.getText()));
-
-        File destination= new File(Constants.IMAGE_PATH +prefixfile + txname.getText()+"."+ext);
-   
-        try {
-            File_Processing.doCopy(new File(txpath.getText()), destination);
-        } catch (IOException ex) {
-            Logger.getLogger(Training_Form.class.getName()).log(Level.SEVERE, null, ex);
+        String rootTXTaudioFile = Constants.TXT_ROOT_AUDIO_PATH + level + "/" + txname.getText();
+        if (!File_Processing.isFileExist(rootTXTaudioFile + "/" + txname.getText())) {
+            File_Processing.createDirectories(rootTXTaudioFile + "/" + txname.getText());
         }
-        
+        wd.extractFloatDataFromAudioInputStream_saveToTXTFile(rootTXTaudioFile + "/" + txname.getText(), audioInputStream);
+        //float data [] =wd.extractFloatDataFromAudioInputStream(audioInputStream);
+        if (iscontinue == 3) {
+            File source = new File(txpath.getText());
+            String ext = File_Processing.getFileExtension(new File(txpath.getText()));
+            String rootImageaudio = Constants.IMAGE_ROOT_PATH + level;
+            File destination = new File(Constants.IMAGE_ROOT_PATH + level + "/" + txname.getText() + "." + ext);
+            if (!destination.exists()) {
+                destination.getParentFile().mkdirs();
+            }
+            destination.setReadable(true);
+            destination.setWritable(true);
+            if (!destination.canWrite()) {
+                destination.setWritable(true);
+            }
+            System.out.println("path audio =" + destination);
 
+            try {
+                File_Processing.doCopy(new File(txpath.getText()), destination);
+            } catch (IOException ex) {
+                Logger.getLogger(Training_Form.class.getName()).log(Level.SEVERE, null, ex);
+            }
+           
+        }else if(iscontinue==1){
+            txname.setText("");
+            txpath.setText("");
+        }
 
-    }
-    
-    public void saveProcessing(){
-        
     }
 
     private Image getScaledImage(Image srcImg, int w, int h) {
@@ -352,6 +372,7 @@ public class Training_Form extends JFrame implements ActionListener {
         txpath.setBounds(130, 110, 200, 25);
 
         playB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/playb.jpg"))); // NOI18N
+        playB.setToolTipText("Play");
         getContentPane().add(playB);
         playB.setBounds(150, 150, 50, 50);
         playB.setPreferredSize(new Dimension(85, 24));
@@ -359,20 +380,22 @@ public class Training_Form extends JFrame implements ActionListener {
         playB.setEnabled(false);
         playB.setFocusable(false);
 
-        saveB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/sukses.jpg"))); // NOI18N
+        saveB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/save.jpg"))); // NOI18N
+        saveB.setToolTipText("Save");
         saveB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveBActionPerformed(evt);
             }
         });
         getContentPane().add(saveB);
-        saveB.setBounds(210, 150, 60, 50);
+        saveB.setBounds(210, 150, 50, 50);
         saveB.setPreferredSize(new Dimension(85, 24));
         saveB.addActionListener(this);
         saveB.setEnabled(false);
         saveB.setFocusable(false);
 
-        captB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/repeatb.jpg"))); // NOI18N
+        captB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/microphone.jpg"))); // NOI18N
+        captB.setToolTipText("Record");
         captB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 captBActionPerformed(evt);
@@ -386,6 +409,7 @@ public class Training_Form extends JFrame implements ActionListener {
         captB.setFocusable(false);
 
         pausB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/resources/pauseb.jpg"))); // NOI18N
+        pausB.setToolTipText("Pause");
         getContentPane().add(pausB);
         pausB.setBounds(90, 150, 50, 50);
         pausB.setPreferredSize(new Dimension(85, 24));
@@ -485,7 +509,7 @@ public class Training_Form extends JFrame implements ActionListener {
                 }
                 captB.setEnabled(true);
                 pausB.setEnabled(false);
-                playB.setText("Play");
+                playB.setToolTipText("Play");
             }
         }
 
