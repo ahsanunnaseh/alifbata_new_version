@@ -49,17 +49,16 @@ public class File_Processing {
         boolean success = (new File(path)).mkdir();
         return success;
     }
-    
+
     public static boolean createDirectories(String path) {
         boolean success = (new File(path)).mkdirs();
         return success;
     }
-    
-    public static boolean isFileExist(String path){
-        File file=new File(path);
+
+    public static boolean isFileExist(String path) {
+        File file = new File(path);
         return file.exists();
     }
-
 
     public static String getFileExtension(File file) {
         if (file == null) {
@@ -73,6 +72,30 @@ public class File_Processing {
         } else {
             return name.substring(extIndex + 1);
         }
+    }
+
+    public static int countFileinDirectory(String path, String extension) {
+        File folder = new File(path);
+        File[] listOfFiles = folder.listFiles();
+        int jumlah = 0;
+        for (File file : listOfFiles) {
+            if (file.isFile() && file.getName().endsWith("." + extension)) {
+                jumlah++;
+            }
+        }
+        return jumlah;
+    }
+
+    public static File [] getFileinDDirectory(String path, String extension) {
+        File folder = new File(path);
+        File[] listOfFiles = folder.listFiles();
+        for (int i = 0; i < listOfFiles.length; i++) {
+            File file = listOfFiles[i];
+            if (file.isFile() && file.getName().endsWith("."+extension)) {
+               listOfFiles[i]=listOfFiles[i];
+            }
+        }
+        return listOfFiles;
     }
 
 }
